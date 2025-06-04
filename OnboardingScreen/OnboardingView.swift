@@ -25,12 +25,12 @@ struct Welcome: View {
     @State private var isNavigating = false
     
     var body: some View {
-        NavigationStack {  // Changed from NavigationView to NavigationStack
+        NavigationStack {  
             VStack(spacing: 0) {
                 TabView {
                     ForEach(pages) { page in
                         VStack(spacing: 0) {
-                            // Image at the top - fills top including status bar
+                            
                             Image(page.image)
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
@@ -38,9 +38,9 @@ struct Welcome: View {
                                 .clipped()
                                 .ignoresSafeArea(.all, edges: .top)
 
-                            // Black rectangle under the image
+                            
                             VStack(spacing: 20) {
-                                // First stack for the label
+                                
                                 VStack {
                                     Text(page.label)
                                         .font(.system(size: 28, weight: .semibold))
@@ -52,7 +52,7 @@ struct Welcome: View {
                                 }
                                 .offset(y: -110)
                                 
-                                // Second stack for the text
+                                
                                 VStack {
                                     Text(page.text)
                                         .font(.body)
@@ -62,9 +62,9 @@ struct Welcome: View {
                                 }
                                 .offset(y: -100)
                                 
-                                // Third stack for the button
+                                
                                 VStack {
-                                    NavigationLink(destination: HomeScreenn()) {  // Fixed typo and using NavigationLink directly
+                                    NavigationLink(destination: HomeScreenn()) {  
                                         Image("frame")
                                             .resizable()
                                             .frame(width: 327, height: 56)
@@ -78,14 +78,14 @@ struct Welcome: View {
                             .frame(width: 327, height: 194)
                             .background(Color.black)
                             
-                            // Additional image at the bottom
+                            
                             VStack {
                                 Image(page.bottomImage)
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .frame(width: 150)
                                     .padding(.top, 10)
-                                    .background(Color.gray) // Debugging aid
+                                    .background(Color.gray) 
                                                                        .onAppear {
                                                                            print("Loading bottom image: \(page.bottomImage)")
                                                                        }
