@@ -5,111 +5,255 @@ struct SignUpView: View {
     @EnvironmentObject var appState: AppState
 
     var body: some View {
+        NavigationStack {
+            ZStack {
+                // BACKGROUND
+                backgroundView
+                
+                VStack {
+                    // CARD CONTAINER
+                    VStack(alignment: .center, spacing: 0) {
+                        headerView
+                        
+                        inputFieldsView
+                            .padding(.bottom, 24)
+
+                        // ERROR MESSAGE
+                        if let error = viewModel.errorMessage {
+                            Text(error)
+                                .font(.caption)
+                                .foregroundColor(.red)
+                                .padding(8)
+                                .background(Color.white.opacity(0.9))
+                                .cornerRadius(8)
+                                .padding(.bottom, 12)
+                        }
+
+                        signUpButton
+                        
+                        termsText
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 40)
+                    .frame(width: 327, alignment: .center)
+                    .background(
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(Color.black.opacity(0.5))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(Color(red: 0.93, green: 0.84, blue: 0.78).opacity(0.4), lineWidth: 1)
+                            )
+                    )
+                    
+                    footerView
+                    
+                    Spacer()
+                        .frame(height: 60)
+                }
+                .padding(.top, 60)
+            }
+            .onChange(of: viewModel.isAuthenticated) { oldValue, newValue in
+                 if newValue {
+                      appState.isAuthenticated = true
+                 }
+             }
+            .alert(isPresented: $viewModel.showAlert) {
+                Alert(
+                    title: Text("Authentication"),
+                    message: Text(viewModel.alertMessage),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
+        }
+    }
+    
+    // MARK: - Subviews
+    
+    @ViewBuilder
+    private var backgroundView: some View {
         ZStack {
-            // BACKGROUND IMAGE
             Image("onboarding")
                 .resizable()
                 .scaledToFill()
+                .blur(radius: 3)
                 .ignoresSafeArea()
-
-            VStack(spacing: 24) {
+            
+            VStack {
                 Spacer()
-
-                // TITLE
-                Text("Create Account 🌿")
-                    .font(.system(size: 32, weight: .bold))
-                    .foregroundColor(.white)
-                    .shadow(radius: 4)
-
-                // INPUT FIELDS
-                VStack(spacing: 16) {
-                    // Email
-                    TextField("Email", text: $viewModel.email)
-                        .keyboardType(.emailAddress)
-                        .autocapitalization(.none)
-                        .padding(.vertical, 12)
-                        .padding(.horizontal)
-                        .background(Color.white)
-                        .cornerRadius(12)
-                        .frame(width:400)
-                    
-                    // Password
-                    SecureField("Password", text: $viewModel.password)
-                        .padding(.vertical, 12)
-                        .padding(.horizontal)
-                        .background(Color.white)
-                        .cornerRadius(12)
-                        .frame(width:400)
-                }
-                .padding(.horizontal, 30)
-
-                // ERROR MESSAGE
-                if let error = viewModel.errorMessage {
-                    Text(error)
-                        .font(.caption)
-                        .foregroundColor(.red)
-                        .padding(8)
-                        .background(Color.white.opacity(0.8))
-                        .cornerRadius(8)
-                }
-
-                // SIGN UP BUTTON
-                Button(action: {
-                    viewModel.signUp()
-                }) {
-                    if viewModel.isLoading {
-                        ProgressView().tint(.white)
-                    } else {
-                        Text("Sign Up")
-                            .fontWeight(.bold)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(AppTheme.Colors.accent)
-                            .foregroundColor(.white)
-                            .cornerRadius(14)
-                            .frame(width:400)
-                    }
-                }
-                .padding(.horizontal, 30)
-                .disabled(viewModel.isLoading)
-
-                // DEBUG LOGS
-                if !viewModel.debugMessage.isEmpty {
-                    ScrollView {
-                        Text(viewModel.debugMessage)
-                            .font(.caption2)
-                            .foregroundColor(.black)
-                            .padding()
-                            .background(Color.white.opacity(0.8))
-                            .cornerRadius(8)
-                    }
-                    .frame(height: 100)
-                    .padding(.horizontal)
-                }
-
-                Spacer()
+                Rectangle()
+                    .foregroundColor(.clear)
+                    .frame(height: 360)
+                    .background(
+                        LinearGradient(
+                            stops: [
+                                Gradient.Stop(color: Color(red: 0.02, green: 0.02, blue: 0.02).opacity(0), location: 0.00),
+                                Gradient.Stop(color: Color(red: 0.02, green: 0.02, blue: 0.02), location: 0.24),
+                            ],
+                            startPoint: UnitPoint(x: 0.5, y: 0),
+                            endPoint: UnitPoint(x: 0.5, y: 1)
+                        )
+                    )
             }
-            .padding(.vertical, 40)
+            .ignoresSafeArea()
         }
-        .onChange(of: viewModel.isAuthenticated) {
-            if viewModel.isAuthenticated {
-                appState.isAuthenticated = true
-            }
-        }
-        .alert(isPresented: $viewModel.showAlert) {
-            Alert(
-                title: Text("Authentication"),
-                message: Text(viewModel.alertMessage),
-                dismissButton: .default(Text("OK"))
+    }
+    
+    @ViewBuilder
+    private var headerView: some View {
+        Text("Welcome to SipSpot")
+            .font(
+                Font.custom("Sora", size: 24)
+                    .weight(.semibold)
             )
+            .kerning(0.12)
+            .multilineTextAlignment(.center)
+            .foregroundColor(.white)
+            .frame(width: 327, alignment: .top)
+            .padding(.bottom, 8)
+        
+        Text("Sign up or log in to discover, order, and enjoy your favorite brews.")
+            .font(Font.custom("Sora", size: 14))
+            .kerning(0.14)
+            .multilineTextAlignment(.center)
+            .foregroundColor(Color(red: 0.96, green: 0.96, blue: 0.96))
+            .frame(maxWidth: .infinity, alignment: .top)
+            .padding(.bottom, 24)
+    }
+    
+    @ViewBuilder
+    private var inputFieldsView: some View {
+        VStack(spacing: 12) {
+            // Name Field
+            customTextField(icon: "person", placeholder: "Name", text: $viewModel.name)
+            
+            // Email Field
+            customTextField(icon: "envelope", placeholder: "Email", text: $viewModel.email, keyboardType: .emailAddress)
+            
+            // Phone Number Field
+            customTextField(icon: "phone", placeholder: "Phone Number", text: $viewModel.phoneNumber, keyboardType: .phonePad)
+            
+            // Password Field
+            customSecureField(icon: "lock", placeholder: "Password", text: $viewModel.password)
+            
+            // Confirm Password Field
+            customSecureField(icon: "lock", placeholder: "Confirm Password", text: $viewModel.confirmPassword)
         }
-        .onChange(of: viewModel.showAlert) { oldValue, newValue in
-            if !newValue && viewModel.shouldNavigate {
-                viewModel.debugMessage += "\nAlert dismissed. Setting isAuthenticated = true"
-                print("SignUpView: Alert dismissed, switching to Home")
-                appState.isAuthenticated = true
+    }
+    
+    @ViewBuilder
+    private func customTextField(icon: String, placeholder: String, text: Binding<String>, keyboardType: UIKeyboardType = .default) -> some View {
+        HStack(spacing: 12) {
+            Image(systemName: icon)
+                .foregroundColor(AppTheme.Colors.background)
+                .frame(width: 20)
+            
+            ZStack(alignment: .leading) {
+                if text.wrappedValue.isEmpty {
+                    Text(placeholder)
+                        .foregroundColor(.white.opacity(0.7))
+                }
+                TextField("", text: text)
+                    .keyboardType(keyboardType)
+                    .autocapitalization(keyboardType == .emailAddress ? .none : .words)
+                    .foregroundColor(.white)
             }
         }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.white.opacity(0.05))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color.white, lineWidth: 2)
+                )
+        )
+        .cornerRadius(12)
+    }
+    
+    @ViewBuilder
+    private func customSecureField(icon: String, placeholder: String, text: Binding<String>) -> some View {
+        HStack(spacing: 12) {
+            Image(systemName: icon)
+                .foregroundColor(AppTheme.Colors.background)
+                .frame(width: 20)
+            
+            ZStack(alignment: .leading) {
+                if text.wrappedValue.isEmpty {
+                    Text(placeholder)
+                        .foregroundColor(.white.opacity(0.7))
+                }
+                SecureField("", text: text)
+                    .foregroundColor(.white)
+            }
+            
+            Image(systemName: "eye")
+                .foregroundColor(AppTheme.Colors.background)
+                .frame(width: 16, height: 16)
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.white.opacity(0.05))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color.white, lineWidth: 2)
+                )
+        )
+        .cornerRadius(12)
+    }
+    
+    @ViewBuilder
+    private var signUpButton: some View {
+        Button(action: {
+            viewModel.signUp()
+        }) {
+            if viewModel.isLoading {
+                ProgressView()
+                    .tint(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+            } else {
+                Text("Sign up")
+                    .font(Font.custom("Sora", size: 16).weight(.semibold))
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+            }
+        }
+        .background(AppTheme.Colors.primaryBrown)
+        .cornerRadius(12)
+        .disabled(viewModel.isLoading)
+    }
+    
+    @ViewBuilder
+    private var termsText: some View {
+        Text("by signing up, you agree to our\nTerms & Policy")
+            .font(Font.custom("Sora", size: 12))
+            .multilineTextAlignment(.center)
+            .foregroundColor(.white.opacity(0.8))
+            .padding(.top, 16)
+    }
+    
+    @ViewBuilder
+    private var footerView: some View {
+        HStack(spacing: 4) {
+            Text("Have an account?")
+                .font(Font.custom("Sora", size: 14))
+                .kerning(0.14)
+                .foregroundColor(AppTheme.Colors.background)
+            
+            Button {
+                // Dismiss action would be ideal here if presented
+            } label: {
+                Text("Login")
+                    .font(Font.custom("Sora", size: 14))
+                    .kerning(0.14)
+                    .foregroundColor(AppTheme.Colors.background)
+                    .underline()
+            }
+        }
+        .frame(width: 327, alignment: .center)
+        .padding(.top, 24)
     }
 }
 

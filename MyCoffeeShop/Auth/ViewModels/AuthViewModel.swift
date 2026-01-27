@@ -2,8 +2,11 @@ import Foundation
 import SwiftUI
 
 class AuthViewModel: ObservableObject {
+    @Published var name = ""
+    @Published var phoneNumber = ""
     @Published var email = ""
     @Published var password = ""
+    @Published var confirmPassword = ""
     @Published var isLoading = false
     @Published var errorMessage: String?
     @Published var isAuthenticated = false
@@ -49,8 +52,18 @@ class AuthViewModel: ObservableObject {
     
     func signUp() {
         debugMessage += "\nSignUp called with email: \(email)"
-        guard !email.isEmpty, !password.isEmpty else {
-            errorMessage = "Please enter email and password."
+        
+        guard !email.isEmpty, !password.isEmpty, !name.isEmpty, !confirmPassword.isEmpty else {
+            errorMessage = "Please fill in all fields."
+            showAlert = true
+            alertMessage = "Please fill in all fields."
+            return
+        }
+        
+        guard password == confirmPassword else {
+            errorMessage = "Passwords do not match."
+            showAlert = true
+            alertMessage = "Passwords do not match."
             return
         }
         
