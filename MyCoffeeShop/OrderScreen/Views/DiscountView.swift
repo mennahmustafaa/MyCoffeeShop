@@ -9,28 +9,31 @@ import SwiftUI
 
 struct DiscountView: View {
     let discountText: String
+    var onTap: (() -> Void)? = nil
 
     var body: some View {
-        HStack {
+        Button(action: { onTap?() }) {
+            HStack {
             Image(systemName: "percent")
-                .foregroundColor(.orange)
+                .foregroundColor(AppTheme.Colors.accent)
                 .font(.system(size: 16))
 
             Text(discountText)
-                .font(.system(size: 14))
-                .foregroundColor(.black)
+                .font(AppTheme.Typography.body())
+                .foregroundColor(AppTheme.Colors.primaryText)
 
             Spacer()
 
             Image(systemName: "chevron.right")
-                .foregroundColor(.gray)
-                .font(.system(size: 12))
+                .foregroundColor(AppTheme.Colors.secondaryText)
+                .font(AppTheme.Typography.caption())
         }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 12)
-        .background(Color.gray.opacity(0.05))
-        .cornerRadius(8)
-        .padding(.horizontal, 20)
+        .padding(.horizontal, AppTheme.Spacing.horizontalPadding)
+        .padding(.vertical, AppTheme.Spacing.mediumSpacing)
+        .background(AppTheme.Colors.secondaryBackground.opacity(0.5))
+        .cornerRadius(AppTheme.CornerRadius.medium)
+        .horizontalPadding()
+    }
     }
 }
 

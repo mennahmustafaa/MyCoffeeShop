@@ -2,7 +2,8 @@ import SwiftUI
 
 struct FavoriteItemView: View {
     @EnvironmentObject var favoriteVM: FavoriteViewModel
-    @Environment(\.dismiss) private var dismiss   // ✅ dismiss instead of new stack
+    @EnvironmentObject var cartVM: CartViewModel
+    @Environment(\.dismiss) private var dismiss   // dismiss instead of new stack
 
     var body: some View {
         ScrollView {
@@ -10,6 +11,7 @@ struct FavoriteItemView: View {
                 ForEach(favoriteVM.favorites) { product in
                     FavoriteViewRow(product: product)
                         .environmentObject(favoriteVM)
+                        .environmentObject(cartVM)
                 }
             }
             .padding(.horizontal, 16)
@@ -25,7 +27,7 @@ struct FavoriteItemView: View {
                     .frame(width: 77, alignment: .top)
             }
 
-            // Custom back button → just dismiss
+            // Custom back button -> just dismiss
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
                     dismiss()
@@ -37,6 +39,13 @@ struct FavoriteItemView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true) // hide default
+        .alert(isPresented: $cartVM.showAlert) {
+            Alert(
+                title: Text("Added to Cart! 🛒"),
+                message: Text(cartVM.successMessage ?? ""),
+                dismissButton: .default(Text("OK"))
+            )
+        }
     }
 }
 

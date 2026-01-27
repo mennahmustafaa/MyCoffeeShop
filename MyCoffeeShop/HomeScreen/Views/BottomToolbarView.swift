@@ -1,3 +1,4 @@
+
 //
 //  BottomToolbarView.swift
 //  MyCoffeeShop
@@ -5,13 +6,20 @@
 //  Created by Mennah on 06/09/2025.
 //
 
+
 import SwiftUI
 
 struct BottomToolbarView: View {
     @ObservedObject var viewModel: ToolbarViewModel
     
     var body: some View {
+
+     VStack(spacing: 0) {
+
+        // Main toolbar content
         VStack(spacing: 0) {
+            // Top section with main navigation icons
+
             HStack(spacing: 50) {
                 
                 // Home button
@@ -60,10 +68,19 @@ struct BottomToolbarView: View {
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 20)
+
         }
         .cornerRadius(25, corners: [.topLeft, .topRight])
         .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: -5)
         .frame(maxWidth: .infinity)
+
+                    }
+      //  .background(Color.white) // White background for toolbar only
+        .cornerRadius(25, corners: [.topLeft, .topRight])
+        .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: -5)
+        .frame(maxWidth: .infinity)
+
+
     }
 }
 
@@ -92,4 +109,6 @@ struct RoundedCorner: Shape {
     BottomToolbarView(viewModel: ToolbarViewModel())
         .padding()
 }
+
+
 

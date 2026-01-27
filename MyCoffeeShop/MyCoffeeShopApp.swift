@@ -1,28 +1,34 @@
-import SwiftUI
-import Firebase
+//
+//  MyCoffeeShopApp.swift
+//  MyCoffeeShop
+//
+//  Created by Mennah on 03/12/2025.
+//
 
-class AppDelegate: NSObject, UIApplicationDelegate {
-    func application(_ application: UIApplication,
-                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
-        FirebaseApp.configure()
-        return true
-    }
-}
+import SwiftUI
 
 @main
 struct MyCoffeeShopApp: App {
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    
-    // ✅ Shared view models
+    @StateObject private var appState = AppState()
     @StateObject private var favoriteVM = FavoriteViewModel()
     @StateObject private var cartVM = CartViewModel()
+    
+    @AppStorage("isOnboardingCompleted") var isOnboardingCompleted = false
 
     var body: some Scene {
         WindowGroup {
-            OnboardingView() // 👈 your entry screen stays here
-                .environmentObject(favoriteVM)
-                .environmentObject(cartVM) // 👈 inject cartVM too
+            Group {
+                if !isOnboardingCompleted {
+                    OnboardingView()
+                } else if !appState.isAuthenticated {
+                    LoginView()
+                } else {
+                    HomeView()
+                }
+            }
+            .environmentObject(appState)
+            .environmentObject(favoriteVM)
+            .environmentObject(cartVM)
         }
     }
 }
-

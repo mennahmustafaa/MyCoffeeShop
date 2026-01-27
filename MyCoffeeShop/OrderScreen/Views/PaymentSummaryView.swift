@@ -11,44 +11,69 @@ struct PaymentSummaryView: View {
     let itemPrice: Double
     let originalDeliveryFee: Double
     let deliveryFee: Double
+    let discountAmount: Double
+    let totalAmount: Double
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Payment Summary")
-                .font(.system(size: 16, weight: .semibold))
+                .font(AppTheme.Typography.headline())
 
             HStack {
                 Text("Price")
-                    .font(.system(size: 14))
-                    .foregroundColor(.black)
+                    .font(AppTheme.Typography.body())
+                    .foregroundColor(AppTheme.Colors.primaryText)
                 Spacer()
                 Text(String(format: "$ %.2f", itemPrice))
-                    .font(.system(size: 14, weight: .semibold))
+                    .font(AppTheme.Typography.bodyMedium())
             }
 
             if originalDeliveryFee > 0 {
                 HStack {
                     Text("Delivery Fee")
-                        .font(.system(size: 14))
-                        .foregroundColor(.black)
+                        .font(AppTheme.Typography.body())
+                        .foregroundColor(AppTheme.Colors.primaryText)
                     Spacer()
                     HStack(spacing: 8) {
                         Text(String(format: "$%.1f", originalDeliveryFee))
-                            .font(.system(size: 14))
+                            .font(AppTheme.Typography.body())
                             .strikethrough()
-                            .foregroundColor(.gray)
+                            .foregroundColor(AppTheme.Colors.secondaryText)
                         Text(String(format: "$%.1f", deliveryFee))
-                            .font(.system(size: 14, weight: .semibold))
+                            .font(AppTheme.Typography.bodyMedium())
                     }
                 }
             }
+            
+            if discountAmount > 0 {
+                HStack {
+                    Text("Discount")
+                        .font(AppTheme.Typography.body())
+                        .foregroundColor(AppTheme.Colors.primaryText)
+                    Spacer()
+                    Text(String(format: "-$%.2f", discountAmount))
+                        .font(AppTheme.Typography.bodyMedium())
+                        .foregroundColor(AppTheme.Colors.accent)
+                }
+            }
+            
+            StandardDivider()
+            
+            HStack {
+                Text("Total Payment")
+                    .font(AppTheme.Typography.body())
+                    .foregroundColor(AppTheme.Colors.primaryText)
+                Spacer()
+                Text(String(format: "$ %.2f", totalAmount))
+                    .font(AppTheme.Typography.bodyMedium())
+            }
         }
-        .padding(.horizontal, 20)
+        .horizontalPadding()
     }
 }
 
 #Preview {
-    PaymentSummaryView(itemPrice: 9.06, originalDeliveryFee: 2.0, deliveryFee: 1.0)
+    PaymentSummaryView(itemPrice: 9.06, originalDeliveryFee: 2.0, deliveryFee: 1.0, discountAmount: 0.45, totalAmount: 9.61)
      //   .previewLayout(.sizeThatFits)
         .padding()
 }

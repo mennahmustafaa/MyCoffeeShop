@@ -4,7 +4,7 @@ class SearchViewModel: ObservableObject {
     @Published var searchText: String = ""
     @Published var allItems: [CoffeeItem]
 
-    // ✅ Custom initializer
+    // Custom initializer
     init(items: [CoffeeItem]) {
         self.allItems = items
     }

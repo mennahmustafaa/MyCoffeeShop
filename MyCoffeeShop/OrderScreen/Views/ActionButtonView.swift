@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 struct ActionButton: View {
     let title: String
     let iconName: String
@@ -16,20 +17,15 @@ struct ActionButton: View {
         Button(action: action) {
             HStack(spacing: 6) {
                 Image(systemName: iconName)
-                    .font(.system(size: 12))
+                    .font(AppTheme.Typography.caption())
                 Text(title)
-                    .font(.system(size: 12))
+                    .font(AppTheme.Typography.caption())
             }
-            .foregroundColor(.gray)
-            .padding(.horizontal, 12)
-            .padding(.vertical, 6)
-            .overlay(
-                RoundedRectangle(cornerRadius: 6)
-                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-            )
         }
+        .secondaryButtonStyle()
     }
 }
+
 
 #Preview {
     ActionButton(title: "Edit Address", iconName: "pencil", action: {})

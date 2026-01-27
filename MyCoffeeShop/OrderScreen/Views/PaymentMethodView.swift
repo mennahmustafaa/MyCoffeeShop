@@ -41,13 +41,13 @@ struct PaymentMethodView: View {
                     .font(.system(size: 12))
             }
         }
-        .padding(.horizontal, 20)
+        .horizontalPadding()
     }
 }
 
 #Preview {
     PaymentMethodView(
-        selectedMethod: .creditCard,
+        selectedMethod: .visa,
         walletBalance: "$12.34",
         onMethodTapped: {}
     )

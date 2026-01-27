@@ -4,10 +4,21 @@ struct ProductDetailView: View {
     let product: ProductDetailItem
     @State private var selectedSize: String = "M"
     @State private var isExpanded: Bool = false
+    @State private var navigateToHome = false
+
     @EnvironmentObject var favoriteVM: FavoriteViewModel
     @EnvironmentObject var cartVM: CartViewModel
     @Environment(\.dismiss) private var dismiss
-
+    
+    var computedPrice: Double {
+        switch selectedSize {
+        case "S": return product.price
+        case "M": return product.price + 1.0
+        case "L": return product.price + 2.0
+        default: return product.price
+        }
+    }
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             // Header
@@ -17,12 +28,14 @@ struct ProductDetailView: View {
                         .foregroundColor(.black)
                         .padding()
                 }
-
+                
                 Spacer()
+                
                 Text("Detail")
                     .font(.headline)
+                
                 Spacer()
-
+                
                 Button(action: { favoriteVM.toggleFavorite(for: product) }) {
                     Image(systemName: favoriteVM.isFavorite(product) ? "heart.fill" : "heart")
                         .foregroundColor(favoriteVM.isFavorite(product) ? .red : .black)
@@ -30,15 +43,15 @@ struct ProductDetailView: View {
                 }
             }
             .padding(.horizontal)
-
-            // Image
+            
+            // Product Image
             Image(product.imageName)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 327, height: 202)
                 .cornerRadius(16)
                 .offset(x: 32)
-
+            
             // Title & Type
             VStack(alignment: .leading, spacing: 4) {
                 Text(product.name)
@@ -46,20 +59,62 @@ struct ProductDetailView: View {
                 Text(product.type)
                     .foregroundColor(.gray)
                     .font(.subheadline)
+                
+                // Icons
+                HStack(spacing: 12) {
+                    Text("Ice/Hot")
+                        .foregroundColor(.gray)
+                        .font(.system(size: 16))
+                        .padding(.vertical, 8)
+                    
+                    Spacer()
+                    
+                    Image(systemName: "bicycle")
+                        .foregroundColor(AppTheme.Colors.primaryBrown)
+                        .padding(8)
+                        .background(AppTheme.Colors.lightGray)
+                        .cornerRadius(8)
+                    
+                    Image(systemName: "leaf")
+                        .foregroundColor(AppTheme.Colors.primaryBrown)
+                        .padding(8)
+                        .background(AppTheme.Colors.lightGray)
+                        .cornerRadius(8)
+                    
+                    Image(systemName: "cup.and.saucer")
+                        .foregroundColor(AppTheme.Colors.primaryBrown)
+                        .padding(8)
+                        .background(AppTheme.Colors.lightGray)
+                        .cornerRadius(8)
+                }
+                
+                // Rating
+                HStack(spacing: 4) {
+                    Image(systemName: "star.fill")
+                    
+                        .foregroundColor(.yellow)
+                        .frame(width: 20, height: 20)
+                    Text("4.8")
+                    Text("(230)")
+                        .foregroundColor(.gray)
+                }
+                .font(.subheadline)
+                .padding(.top, 4)
             }
             .padding(.horizontal)
-
+            
             Divider()
-
+            
             // Description
             VStack(alignment: .leading, spacing: 8) {
                 Text("Description")
                     .font(.headline)
+                
                 Text(isExpanded ? product.description :
-                     String(product.description.prefix(120)) + "…")
+                        String(product.description.prefix(120)) + "…")
                     .foregroundColor(.gray)
                     .font(.subheadline)
-
+                
                 Button(action: { isExpanded.toggle() }) {
                     Text(isExpanded ? "Read Less" : "Read More")
                         .font(.subheadline)
@@ -67,12 +122,12 @@ struct ProductDetailView: View {
                 }
             }
             .padding(.horizontal)
-
+            
             // Size Picker
             VStack(alignment: .leading, spacing: 16) {
                 Text("Size")
                     .font(.headline)
-
+                
                 HStack {
                     ForEach(["S", "M", "L"], id: \.self) { size in
                         Button(action: { selectedSize = size }) {
@@ -91,22 +146,24 @@ struct ProductDetailView: View {
                 }
             }
             .padding(.horizontal)
-
+            
             Spacer()
-
+            
             // Price + Add to Cart
-            HStack {
+            HStack(alignment: .center, spacing: 34) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Price")
                         .foregroundColor(.gray)
-                    Text("$ \(String(format: "%.2f", product.price))")
-                        .font(.title3).bold()
-                        .foregroundColor(.brown)
+                    
+                    Text("$ \(String(format: "%.2f", computedPrice))")
+                        .font(.title3)
+                        .bold()
+                        .foregroundColor(AppTheme.Colors.primaryBrown)
                         .offset(y: -4)
                 }
-
+                
                 Spacer()
-
+                
                 Button(action: {
                     cartVM.addToCart(product: product, size: selectedSize)
                 }) {
@@ -116,23 +173,30 @@ struct ProductDetailView: View {
                         .frame(width: 217)
                         .background(Color.brown)
                         .cornerRadius(14)
-                        .offset(x: -4)
                 }
             }
             .padding(.horizontal)
             .padding(.bottom, 20)
-            .offset(y: -20)
         }
         .navigationBarHidden(true)
+        .navigationDestination(isPresented: $navigateToHome) {
+            HomeView()
+        }
+        .alert(isPresented: $cartVM.showAlert) {
+            Alert(
+                title: Text("Added to Cart! 🛒"),
+                message: Text(cartVM.successMessage ?? ""),
+                dismissButton: .default(Text("OK"))
+            )
+        }
     }
 }
 
-
 #Preview {
-    let productVM = ProductListViewModel()
+    let productVM = ProductDetailViewModel()
     let favoriteVM = FavoriteViewModel()
     let cartVM = CartViewModel()
-
+    
     return NavigationStack {
         ProductDetailView(product: productVM.products[0])
             .environmentObject(favoriteVM)
@@ -140,4 +204,3 @@ struct ProductDetailView: View {
     }
 }
 
-  

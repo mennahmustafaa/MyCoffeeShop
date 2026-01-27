@@ -31,14 +31,14 @@ struct OrderButtonView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: 50)
-                .background(Color.orange)
-                .cornerRadius(16)
+                .background(AppTheme.Colors.accent)
+                .cornerRadius(AppTheme.CornerRadius.extraLarge)
             }
             .disabled(isLoading)
-            .padding(.horizontal, 20)
-            .padding(.top, 16)
-            .padding(.bottom, 20)
-            .background(Color.white)
+            .horizontalPadding()
+            .padding(.top, AppTheme.Spacing.cardPadding)
+            .padding(.bottom, AppTheme.Spacing.verticalSpacing)
+            .background(AppTheme.Colors.background)
         }
     }
 }

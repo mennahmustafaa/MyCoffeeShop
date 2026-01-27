@@ -6,21 +6,21 @@
 //
 import Foundation
 enum PaymentMethod: CaseIterable {
-    case cashWallet, creditCard, digitalWallet
+    case applePay, visa, cash
     
     var title: String {
         switch self {
-        case .cashWallet: return "Cash/Wallet"
-        case .creditCard: return "Credit Card"
-        case .digitalWallet: return "Digital Wallet"
+        case .applePay: return "Apple Pay"
+        case .visa: return "Visa"
+        case .cash: return "Cash"
         }
     }
     
     var iconName: String {
         switch self {
-        case .cashWallet: return "banknote"
-        case .creditCard: return "creditcard"
-        case .digitalWallet: return "wallet.pass"
+        case .applePay: return "apple.logo"
+        case .visa: return "creditcard.fill"
+        case .cash: return "banknote.fill"
         }
     }
 }

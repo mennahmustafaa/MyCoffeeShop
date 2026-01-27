@@ -43,7 +43,7 @@ struct CoffeeItemView: View {
                 onDecrease: onDecrease
             )
         }
-        .padding(.horizontal, 20)
+        .horizontalPadding()
     }
 }
 

@@ -103,6 +103,16 @@ struct HomeView: View {
                                 showCart = true
                             }
                         }
+                        .onChange(of: showFavorites) {
+                            if !showFavorites {
+                                bottomBarViewModel.selectedTab = "home"
+                            }
+                        }
+                        .onChange(of: showCart) {
+                            if !showCart {
+                                bottomBarViewModel.selectedTab = "home"
+                            }
+                        }
 
                 }
             }
@@ -129,7 +139,7 @@ struct HomeView: View {
             }
             // Navigation for cart
             .navigationDestination(isPresented: $showCart) {
-                CartView()
+                CartView(rootPresenting: $showCart)
                     .environmentObject(cartVM)
             }
         }

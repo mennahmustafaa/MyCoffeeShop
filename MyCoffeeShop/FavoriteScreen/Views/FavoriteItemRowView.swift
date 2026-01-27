@@ -3,8 +3,7 @@ import SwiftUI
 struct FavoriteViewRow: View {
     let product: ProductDetailItem
     @EnvironmentObject var favoriteVM: FavoriteViewModel
-    // 👉 You’ll need a CartViewModel if you want to manage a real cart
-    // @EnvironmentObject var cartVM: CartViewModel
+    @EnvironmentObject var cartVM: CartViewModel
 
     var body: some View {
         HStack {
@@ -37,10 +36,10 @@ struct FavoriteViewRow: View {
             }
             .buttonStyle(PlainButtonStyle())
 
-            // Plus button → Add to cart
+            // Plus button -> Add to cart
             Button(action: {
                 print("➕ Added \(product.name) to cart")
-                // cartVM.addToCart(product)
+                cartVM.addToCart(product: product, size: "M")
             }) {
                 Image(systemName: "plus")
                     .resizable()
@@ -65,7 +64,7 @@ struct FavoriteViewRow: View {
 }
 
 #Preview {
-    let productVM = ProductListViewModel()
+    let productVM = ProductDetailViewModel()
     let favoriteVM = FavoriteViewModel()
     favoriteVM.toggleFavorite(for: productVM.products[0])
     return FavoriteViewRow(product: productVM.products[0])

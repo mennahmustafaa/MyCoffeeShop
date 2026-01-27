@@ -17,7 +17,7 @@ struct CoffeeCardView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 150, height: 134)
-                    .background(Color(hex: "#2A2A2A"))
+                        .background(AppTheme.Colors.darkGray)
                     .cornerRadius(16)
                     .clipped()
                     .padding(10)
@@ -37,9 +37,7 @@ struct CoffeeCardView: View {
 
                 Spacer()
 
-                Image(systemName: "star.fill")
-                    .font(.caption)
-                    .foregroundColor(.orange)
+
             }
 
             Text(item.subtitle)
@@ -56,7 +54,7 @@ struct CoffeeCardView: View {
                     Image(systemName: "plus")
                         .foregroundColor(.white)
                         .padding(8)
-                        .background(Color(hex: "#2A2A2A"))
+                            .background(AppTheme.Colors.darkGray)
                         .clipShape(Circle())
                 }
             }

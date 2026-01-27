@@ -22,15 +22,15 @@ struct DeliveryOptionView: View {
                             .foregroundColor(selectedOption == option ? .white : .gray)
                             .frame(maxWidth: .infinity)
                             .frame(height: 44)
-                            .background(selectedOption == option ? Color(hex:"#C67C4E") : Color.clear)
+                            .background(selectedOption == option ? AppTheme.Colors.primaryBrown : Color.clear)
                     }
                 }
             }
             .background(Color.gray.opacity(0.1))
             .cornerRadius(8)
         }
-        .padding(.horizontal, 20)
-        .padding(.top, 20)
+        .horizontalPadding()
+        .padding(.top, AppTheme.Spacing.verticalSpacing)
     }
 }
 

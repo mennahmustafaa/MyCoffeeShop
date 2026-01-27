@@ -25,7 +25,7 @@ struct HeaderView: View {
                     .font(.title2)
             }
         }
-        .padding(.horizontal, 20)
+        .horizontalPadding()
         .padding(.top, 10)
     }
 }

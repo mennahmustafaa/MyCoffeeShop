@@ -6,7 +6,7 @@ class CartViewModel: ObservableObject {
     @Published var showAlert: Bool = false
 
     var totalPrice: Double {
-        cartItems.reduce(0) { $0 + ($1.product.price * Double($1.quantity)) }
+        cartItems.reduce(0) { $0 + ($1.adjustedPrice * Double($1.quantity)) }
     }
 
     func addToCart(product: ProductDetailItem, size: String) {

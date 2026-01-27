@@ -7,9 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3067B0872E26D3F900F66A63 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 3067B0862E26D3F900F66A63 /* FirebaseAnalytics */; };
-		3067B0892E26D3F900F66A63 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 3067B0882E26D3F900F66A63 /* FirebaseAuth */; };
-		3067B08B2E26D3F900F66A63 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 3067B08A2E26D3F900F66A63 /* FirebaseCore */; };
+		3067522B2EE202EE000EAAFC /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = 3067522A2EE202EE000EAAFC /* Auth */; };
+		30BBDF4C2EE21F29006FF558 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 30BBDF4B2EE21F29006FF558 /* Supabase */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,16 +38,16 @@
 		30934C682E46558300EB4E81 /* Exceptions for "MyCoffeeShop" folder in "MyCoffeeShop" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				OrderScreen/Views/MyCoffeeShopUITests/MyCoffeeShopUITests.swift,
-				OrderScreen/Views/MyCoffeeShopUITests/MyCoffeeShopUITestsLaunchTests.swift,
+				MyCoffeeShopUITests/MyCoffeeShopUITests.swift,
+				MyCoffeeShopUITests/MyCoffeeShopUITestsLaunchTests.swift,
 			);
 			target = 304010262E2619F1003A96B5 /* MyCoffeeShop */;
 		};
 		30934C692E46558300EB4E81 /* Exceptions for "MyCoffeeShop" folder in "MyCoffeeShopUITests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				OrderScreen/Views/MyCoffeeShopUITests/MyCoffeeShopUITests.swift,
-				OrderScreen/Views/MyCoffeeShopUITests/MyCoffeeShopUITestsLaunchTests.swift,
+				MyCoffeeShopUITests/MyCoffeeShopUITests.swift,
+				MyCoffeeShopUITests/MyCoffeeShopUITestsLaunchTests.swift,
 			);
 			target = 304010402E2619F4003A96B5 /* MyCoffeeShopUITests */;
 		};
@@ -76,9 +75,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3067B0872E26D3F900F66A63 /* FirebaseAnalytics in Frameworks */,
-				3067B08B2E26D3F900F66A63 /* FirebaseCore in Frameworks */,
-				3067B0892E26D3F900F66A63 /* FirebaseAuth in Frameworks */,
+				30BBDF4C2EE21F29006FF558 /* Supabase in Frameworks */,
+				3067522B2EE202EE000EAAFC /* Auth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -104,6 +102,7 @@
 			children = (
 				304010292E2619F1003A96B5 /* MyCoffeeShop */,
 				3040103A2E2619F4003A96B5 /* MyCoffeeShopTests */,
+				3096F2932E8AAD7E006142E7 /* Frameworks */,
 				304010282E2619F1003A96B5 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -116,6 +115,13 @@
 				304010412E2619F4003A96B5 /* MyCoffeeShopUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		3096F2932E8AAD7E006142E7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -138,9 +144,8 @@
 			);
 			name = MyCoffeeShop;
 			packageProductDependencies = (
-				3067B0862E26D3F900F66A63 /* FirebaseAnalytics */,
-				3067B0882E26D3F900F66A63 /* FirebaseAuth */,
-				3067B08A2E26D3F900F66A63 /* FirebaseCore */,
+				3067522A2EE202EE000EAAFC /* Auth */,
+				30BBDF4B2EE21F29006FF558 /* Supabase */,
 			);
 			productName = MyCoffeeShop;
 			productReference = 304010272E2619F1003A96B5 /* MyCoffeeShop.app */;
@@ -197,7 +202,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1620;
-				LastUpgradeCheck = 1620;
+				LastUpgradeCheck = 2610;
 				TargetAttributes = {
 					304010262E2619F1003A96B5 = {
 						CreatedOnToolsVersion = 16.2;
@@ -222,7 +227,7 @@
 			mainGroup = 3040101E2E2619F0003A96B5;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				3067B0852E26D3F900F66A63 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				306752292EE202EE000EAAFC /* XCRemoteSwiftPackageReference "supabase-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 304010282E2619F1003A96B5 /* Products */;
@@ -333,6 +338,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = SXQ7VMU6LS;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -356,6 +362,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -396,6 +403,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = SXQ7VMU6LS;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -412,6 +420,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -425,7 +434,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MyCoffeeShop/Preview Content\"";
-				DEVELOPMENT_TEAM = SXQ7VMU6LS;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -454,7 +462,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MyCoffeeShop/Preview Content\"";
-				DEVELOPMENT_TEAM = SXQ7VMU6LS;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -481,7 +488,6 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = SXQ7VMU6LS;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				MARKETING_VERSION = 1.0;
@@ -500,7 +506,6 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = SXQ7VMU6LS;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				MARKETING_VERSION = 1.0;
@@ -518,7 +523,6 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = SXQ7VMU6LS;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = coffee.MyCoffeeShopUITests;
@@ -535,7 +539,6 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = SXQ7VMU6LS;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = coffee.MyCoffeeShopUITests;
@@ -589,31 +592,26 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		3067B0852E26D3F900F66A63 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+		306752292EE202EE000EAAFC /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			repositoryURL = "https://github.com/supabase/supabase-swift";
 			requirement = {
-				kind = exactVersion;
-				version = 12.0.0;
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		3067B0862E26D3F900F66A63 /* FirebaseAnalytics */ = {
+		3067522A2EE202EE000EAAFC /* Auth */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 3067B0852E26D3F900F66A63 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAnalytics;
+			package = 306752292EE202EE000EAAFC /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Auth;
 		};
-		3067B0882E26D3F900F66A63 /* FirebaseAuth */ = {
+		30BBDF4B2EE21F29006FF558 /* Supabase */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 3067B0852E26D3F900F66A63 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAuth;
-		};
-		3067B08A2E26D3F900F66A63 /* FirebaseCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 3067B0852E26D3F900F66A63 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseCore;
+			package = 306752292EE202EE000EAAFC /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
