@@ -107,6 +107,7 @@ class OrderViewModel: ObservableObject {
 
     @Published var showingCreditCardInput = false
     @Published var showingSuccessScreen = false
+    @Published var showingPickupSuccess = false
 
     func placeOrder() {
         if selectedPaymentMethod == .visa {
@@ -125,7 +126,13 @@ class OrderViewModel: ObservableObject {
         // Clear note after order
         self.orderNote = ""
         UserDefaults.standard.removeObject(forKey: self.noteStorageKey)
-        self.showingSuccessScreen = true
+        
+        // Navigate based on delivery option
+        if selectedDeliveryOption == .pickup {
+            self.showingPickupSuccess = true
+        } else {
+            self.showingSuccessScreen = true
+        }
     }
     
     func applyPromoCode() {

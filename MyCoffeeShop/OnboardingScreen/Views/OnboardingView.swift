@@ -3,12 +3,12 @@ import SwiftUI
 
 struct OnboardingView: View {
     @StateObject private var viewModel = OnboardingViewModel()
-    @EnvironmentObject var cartVM: CartViewModel
-    @EnvironmentObject var favoriteVM: FavoriteViewModel
+    @Binding var isOnboardingCompleted: Bool
 
     var body: some View {
-        NavigationStack {
-            Welcome(viewModel: viewModel)
+        Welcome(viewModel: viewModel) {
+            print("Get Started tapped - setting isOnboardingCompleted = true")
+            isOnboardingCompleted = true
         }
         .navigationBarBackButtonHidden(true)
         .preferredColorScheme(.dark)
@@ -17,5 +17,5 @@ struct OnboardingView: View {
 
 // Preview
 #Preview {
-    OnboardingView()
+    OnboardingView(isOnboardingCompleted: .constant(false))
 }

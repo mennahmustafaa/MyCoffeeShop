@@ -38,6 +38,7 @@
 		30934C682E46558300EB4E81 /* Exceptions for "MyCoffeeShop" folder in "MyCoffeeShop" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Info.plist,
 				MyCoffeeShopUITests/MyCoffeeShopUITests.swift,
 				MyCoffeeShopUITests/MyCoffeeShopUITestsLaunchTests.swift,
 			);
@@ -436,6 +437,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"MyCoffeeShop/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MyCoffeeShop/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -464,6 +466,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"MyCoffeeShop/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MyCoffeeShop/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

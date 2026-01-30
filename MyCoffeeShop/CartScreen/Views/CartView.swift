@@ -3,6 +3,7 @@ import SwiftUI
 struct CartView: View {
     @EnvironmentObject var cartVM: CartViewModel
     @State private var navigateToOrder = false
+    @State private var checkoutPressed = false
     var rootPresenting: Binding<Bool>? // Optional binding for pop to root
 
     var body: some View {
@@ -20,7 +21,7 @@ struct CartView: View {
                 Spacer()
             } else {
                 List {
-                    ForEach(cartVM.cartItems) { item in
+                    ForEach(Array(cartVM.cartItems.enumerated()), id: \.element.id) { index, item in
                         HStack(spacing: 12) {
                             Image(item.product.imageName)
                                 .resizable()
@@ -49,7 +50,9 @@ struct CartView: View {
 
                             HStack(spacing: 12) {
                                 Button {
-                                    cartVM.decreaseQuantity(for: item)
+                                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                        cartVM.decreaseQuantity(for: item)
+                                    }
                                 } label: {
                                     Image(systemName: "minus.circle.fill")
                                         .font(.system(size: 22))
@@ -61,7 +64,9 @@ struct CartView: View {
                                     .frame(minWidth: 24)
 
                                 Button {
-                                    cartVM.increaseQuantity(for: item)
+                                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                        cartVM.increaseQuantity(for: item)
+                                    }
                                 } label: {
                                     Image(systemName: "plus.circle.fill")
                                         .font(.system(size: 22))
@@ -71,6 +76,7 @@ struct CartView: View {
                             }
                         }
                         .padding(.vertical, 8)
+                        .slideInFromBottom(delay: Double(index) * 0.05)
                     }
                 }
                 .listStyle(.insetGrouped)
@@ -85,13 +91,26 @@ struct CartView: View {
                     Spacer()
 
                     Button("Checkout") {
-                        navigateToOrder = true
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                            checkoutPressed = true
+                        }
+                        
+                        let impact = UIImpactFeedbackGenerator(style: .medium)
+                        impact.impactOccurred()
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                                checkoutPressed = false
+                            }
+                            navigateToOrder = true
+                        }
                     }
                     .padding(.horizontal, 20)
                     .padding(.vertical, 10)
                     .background(AppTheme.Colors.primaryBrown)
                     .foregroundColor(.white)
                     .cornerRadius(10)
+                    .scaleEffect(checkoutPressed ? 0.95 : 1.0)
                 }
                 .padding(.horizontal)
                 .padding(.bottom, 8)

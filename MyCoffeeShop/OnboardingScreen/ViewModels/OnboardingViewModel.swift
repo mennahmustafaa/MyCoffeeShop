@@ -13,7 +13,10 @@ class OnboardingViewModel: ObservableObject {
     @AppStorage("isOnboardingCompleted") var isOnboardingCompleted = false
 
     func completeOnboarding() {
-        isOnboardingCompleted = true
+        print("OnboardingViewModel: completeOnboarding called")
+        withAnimation {
+            isOnboardingCompleted = true
+        }
         // AppState in MyCoffeeShopApp will detect this change and switch to LoginView
     }
 }

@@ -152,7 +152,12 @@ struct OrderView: View {
             .presentationDetents([.height(250)])
         }
         .navigationDestination(isPresented: $viewModel.showingSuccessScreen) {
-            DeliveryTrackingView(address: addressViewModel.address)
+            DeliveryTrackingView(address: addressViewModel.address, rootPresenting: rootPresenting)
+                .environmentObject(cartVM)
+        }
+        .navigationDestination(isPresented: $viewModel.showingPickupSuccess) {
+            PickupSuccessView(rootPresenting: rootPresenting)
+                .environmentObject(cartVM)
         }
     }
     

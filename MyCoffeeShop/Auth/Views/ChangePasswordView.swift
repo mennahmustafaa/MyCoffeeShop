@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ForgotPasswordView: View {
+struct ChangePasswordView: View {
     @StateObject private var viewModel = AuthViewModel()
     @Environment(\.presentationMode) var presentationMode
     
@@ -14,13 +14,15 @@ struct ForgotPasswordView: View {
                 VStack(alignment: .center, spacing: 0) {
                     // HEADER
                     AuthHeaderView(
-                        title: "Forgot Password?",
-                        subtitle: "Enter your email correctly and we'll send you instructions to reset your password."
+                        title: "Change Password",
+                        subtitle: "Enter your new password below."
                     )
                     
                     // INPUTS
                     VStack(spacing: 12) {
-                        CustomAuthTextField(icon: "envelope", placeholder: "Email", text: $viewModel.email, keyboardType: .emailAddress)
+                        CustomAuthSecureField(icon: "lock", placeholder: "New Password", text: $viewModel.password)
+                        
+                        CustomAuthSecureField(icon: "lock", placeholder: "Confirm Password", text: $viewModel.confirmPassword)
                     }
                     .padding(.bottom, 24)
 
@@ -36,30 +38,22 @@ struct ForgotPasswordView: View {
                     }
 
                     // ACTION BUTTON
-                    AuthButton(title: "Send Reset Link", isLoading: viewModel.isLoading) {
-                        viewModel.resetPassword()
+                    AuthButton(title: "Update Password", isLoading: viewModel.isLoading) {
+                        viewModel.updatePassword()
                     }
                 }
                 .authCardStyle()
                 
-                // FOOTER
-                HStack(spacing: 4) {
-                    Text("Remember password?")
+                // BACK BUTTON
+                Button {
+                    presentationMode.wrappedValue.dismiss()
+                } label: {
+                    Text("Back")
                         .font(Font.custom("Sora", size: 14))
                         .kerning(0.14)
                         .foregroundColor(AppTheme.Colors.background)
-                    
-                    Button {
-                        presentationMode.wrappedValue.dismiss()
-                    } label: {
-                        Text("Login")
-                            .font(Font.custom("Sora", size: 14))
-                            .kerning(0.14)
-                            .foregroundColor(AppTheme.Colors.background)
-                            .underline()
-                    }
+                        .underline()
                 }
-                .frame(width: 327, alignment: .center)
                 .padding(.top, 24)
                 
                 Spacer()
@@ -82,11 +76,5 @@ struct ForgotPasswordView: View {
 }
 
 #Preview {
-    NavigationStack {
-        ZStack {
-            // Mock Background for Preview context
-            Color.black.ignoresSafeArea()
-            ForgotPasswordView()
-        }
-    }
+    ChangePasswordView()
 }

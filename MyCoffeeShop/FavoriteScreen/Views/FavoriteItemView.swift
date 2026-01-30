@@ -3,7 +3,7 @@ import SwiftUI
 struct FavoriteItemView: View {
     @EnvironmentObject var favoriteVM: FavoriteViewModel
     @EnvironmentObject var cartVM: CartViewModel
-    @Environment(\.dismiss) private var dismiss   // dismiss instead of new stack
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         ScrollView {
@@ -38,7 +38,7 @@ struct FavoriteItemView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true) // hide default
+        .navigationBarBackButtonHidden(true)
         .alert(isPresented: $cartVM.showAlert) {
             Alert(
                 title: Text("Added to Cart! 🛒"),
@@ -53,6 +53,6 @@ struct FavoriteItemView: View {
     NavigationStack {
         FavoriteItemView()
             .environmentObject(FavoriteViewModel())
+            .environmentObject(CartViewModel())
     }
 }
-

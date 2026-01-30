@@ -9,6 +9,8 @@ import SwiftUI
 
 struct CoffeeCardView: View {
     let item: CoffeeItem
+    var onAddToCart: (() -> Void)? = nil
+    @State private var buttonPressed = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
@@ -50,12 +52,29 @@ struct CoffeeCardView: View {
 
                 Spacer()
 
-                Button(action: {}) {
+                Button(action: {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.5)) {
+                        buttonPressed = true
+                    }
+                    
+                    // Haptic feedback
+                    let impact = UIImpactFeedbackGenerator(style: .light)
+                    impact.impactOccurred()
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                            buttonPressed = false
+                        }
+                    }
+                    
+                    onAddToCart?()
+                }) {
                     Image(systemName: "plus")
                         .foregroundColor(.white)
                         .padding(8)
                             .background(AppTheme.Colors.darkGray)
                         .clipShape(Circle())
+                        .scaleEffect(buttonPressed ? 1.2 : 1.0)
                 }
             }
         }
@@ -71,3 +90,4 @@ struct CoffeeCardView: View {
         CoffeeGridView(viewModel: CoffeeListViewModel())
     
 }
+

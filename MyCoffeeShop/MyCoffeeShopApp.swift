@@ -13,13 +13,13 @@ struct MyCoffeeShopApp: App {
     @StateObject private var favoriteVM = FavoriteViewModel()
     @StateObject private var cartVM = CartViewModel()
     
-    @AppStorage("isOnboardingCompleted") var isOnboardingCompleted = false
+    @State private var isOnboardingCompleted = false
 
     var body: some Scene {
         WindowGroup {
-            Group {
+            NavigationStack {
                 if !isOnboardingCompleted {
-                    OnboardingView()
+                    OnboardingView(isOnboardingCompleted: $isOnboardingCompleted)
                 } else if !appState.isAuthenticated {
                     LoginView()
                 } else {
@@ -29,6 +29,19 @@ struct MyCoffeeShopApp: App {
             .environmentObject(appState)
             .environmentObject(favoriteVM)
             .environmentObject(cartVM)
+            .onOpenURL { url in
+                Task {
+                    do {
+                        try await SupabaseService.shared.handleDeepLink(url: url)
+                        // After successful email confirmation, update auth state
+                        await MainActor.run {
+                            appState.isAuthenticated = true
+                        }
+                    } catch {
+                        print("Deep link error: \(error.localizedDescription)")
+                    }
+                }
+            }
         }
     }
 }

@@ -3,10 +3,9 @@ import SwiftUI
 
 class AppState: ObservableObject {
     @Published var isAuthenticated = false
-    @AppStorage("isOnboardingCompleted") var isOnboardingCompleted = false
     
     init() {
-        checkSession()
+        // Don't auto-check session on init - let the user login manually
     }
     
     func checkSession() {

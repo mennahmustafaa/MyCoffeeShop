@@ -11,9 +11,12 @@ import MapKit
 struct DeliveryTrackingView: View {
     @StateObject private var viewModel: DeliveryTrackingViewModel
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var cartVM: CartViewModel
+    var rootPresenting: Binding<Bool>?
     
-    init(address: DeliveryAddress) {
+    init(address: DeliveryAddress, rootPresenting: Binding<Bool>? = nil) {
         _viewModel = StateObject(wrappedValue: DeliveryTrackingViewModel(address: address))
+        self.rootPresenting = rootPresenting
     }
     
     var body: some View {
@@ -59,7 +62,13 @@ struct DeliveryTrackingView: View {
             VStack {
                 HStack {
                     Button(action: {
-                        dismiss()
+                        // Clear cart and navigate home
+                        cartVM.clearCart()
+                        if let rootPresenting = rootPresenting {
+                            rootPresenting.wrappedValue = false
+                        } else {
+                            dismiss()
+                        }
                     }) {
                         Image(systemName: "chevron.left")
                             .font(.system(size: 20, weight: .semibold))
@@ -191,6 +200,10 @@ struct DeliveryTrackingView: View {
         }
         .edgesIgnoringSafeArea(.all)
         .navigationBarHidden(true)
+        .onAppear {
+            // Clear cart when tracking view appears
+            cartVM.clearCart()
+        }
     }
 }
 
@@ -199,5 +212,7 @@ struct DeliveryTrackingView: View {
 
 
 #Preview {
-    DeliveryTrackingView(address: DeliveryAddress(area: "Cairo", locationName: "Home", buildingName: "Nile City Towers", latitude: 30.0, longitude: 31.0))
+    let cartVM = CartViewModel()
+    return DeliveryTrackingView(address: DeliveryAddress(area: "Cairo", locationName: "Home", buildingName: "Nile City Towers", latitude: 30.0, longitude: 31.0))
+        .environmentObject(cartVM)
 }

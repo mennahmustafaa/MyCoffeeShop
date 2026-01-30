@@ -5,6 +5,9 @@ struct ProductDetailView: View {
     @State private var selectedSize: String = "M"
     @State private var isExpanded: Bool = false
     @State private var navigateToHome = false
+    @State private var showContent = false
+    @State private var favoritePressed = false
+    @State private var addToCartPressed = false
 
     @EnvironmentObject var favoriteVM: FavoriteViewModel
     @EnvironmentObject var cartVM: CartViewModel
@@ -36,10 +39,27 @@ struct ProductDetailView: View {
                 
                 Spacer()
                 
-                Button(action: { favoriteVM.toggleFavorite(for: product) }) {
+                Button(action: {
+                    withAnimation(.spring(response: 0.4, dampingFraction: 0.5)) {
+                        favoritePressed = true
+                    }
+                    
+                    let impact = UIImpactFeedbackGenerator(style: .medium)
+                    impact.impactOccurred()
+                    
+                    favoriteVM.toggleFavorite(for: product)
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                        withAnimation(.spring(response: 0.4, dampingFraction: 0.6)) {
+                            favoritePressed = false
+                        }
+                    }
+                }) {
                     Image(systemName: favoriteVM.isFavorite(product) ? "heart.fill" : "heart")
                         .foregroundColor(favoriteVM.isFavorite(product) ? .red : .black)
                         .padding()
+                        .scaleEffect(favoritePressed ? 1.3 : 1.0)
+                        .rotationEffect(.degrees(favoritePressed ? 15 : 0))
                 }
             }
             .padding(.horizontal)
@@ -51,6 +71,8 @@ struct ProductDetailView: View {
                 .frame(width: 327, height: 202)
                 .cornerRadius(16)
                 .offset(x: 32)
+                .scaleEffect(showContent ? 1 : 0.9)
+                .opacity(showContent ? 1 : 0)
             
             // Title & Type
             VStack(alignment: .leading, spacing: 4) {
@@ -102,6 +124,8 @@ struct ProductDetailView: View {
                 .padding(.top, 4)
             }
             .padding(.horizontal)
+            .opacity(showContent ? 1 : 0)
+            .offset(x: showContent ? 0 : -20)
             
             Divider()
             
@@ -130,7 +154,13 @@ struct ProductDetailView: View {
                 
                 HStack {
                     ForEach(["S", "M", "L"], id: \.self) { size in
-                        Button(action: { selectedSize = size }) {
+                        Button(action: {
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                selectedSize = size
+                            }
+                            let impact = UIImpactFeedbackGenerator(style: .light)
+                            impact.impactOccurred()
+                        }) {
                             Text(size)
                                 .padding()
                                 .frame(maxWidth: .infinity)
@@ -140,6 +170,7 @@ struct ProductDetailView: View {
                                     RoundedRectangle(cornerRadius: 10)
                                         .stroke(selectedSize == size ? Color.orange : Color.clear, lineWidth: 1.5)
                                 )
+                                .scaleEffect(selectedSize == size ? 1.05 : 1.0)
                         }
                         .foregroundColor(.primary)
                     }
@@ -165,7 +196,20 @@ struct ProductDetailView: View {
                 Spacer()
                 
                 Button(action: {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.5)) {
+                        addToCartPressed = true
+                    }
+                    
+                    let impact = UIImpactFeedbackGenerator(style: .medium)
+                    impact.impactOccurred()
+                    
                     cartVM.addToCart(product: product, size: selectedSize)
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                            addToCartPressed = false
+                        }
+                    }
                 }) {
                     Text("Add to Cart")
                         .foregroundColor(.white)
@@ -173,6 +217,7 @@ struct ProductDetailView: View {
                         .frame(width: 217)
                         .background(Color.brown)
                         .cornerRadius(14)
+                        .scaleEffect(addToCartPressed ? 0.95 : 1.0)
                 }
             }
             .padding(.horizontal)
@@ -188,6 +233,11 @@ struct ProductDetailView: View {
                 message: Text(cartVM.successMessage ?? ""),
                 dismissButton: .default(Text("OK"))
             )
+        }
+        .onAppear {
+            withAnimation(.spring(response: 0.6, dampingFraction: 0.8).delay(0.1)) {
+                showContent = true
+            }
         }
     }
 }

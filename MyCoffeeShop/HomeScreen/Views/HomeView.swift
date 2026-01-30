@@ -1,8 +1,9 @@
 import SwiftUI
 
 struct HomeView: View {
-    @EnvironmentObject var cartVM: CartViewModel       // 👈 shared cart
-    @EnvironmentObject var favoriteVM: FavoriteViewModel  // 👈 shared favorites
+    @EnvironmentObject var cartVM: CartViewModel
+    @EnvironmentObject var favoriteVM: FavoriteViewModel
+    @EnvironmentObject var appState: AppState
 
     @StateObject private var locationViewModel = LocationViewModel()
     @StateObject private var coffeeViewModel = CoffeeListViewModel()
@@ -11,7 +12,11 @@ struct HomeView: View {
     @State private var showLocationPicker = false
     @State private var selectedProduct: CoffeeItem? = nil
     @State private var showFavorites = false
-    @State private var showCart = false   // 👈 add cart state
+    @State private var showCart = false
+    @State private var showNotifications = false
+    @State private var showHeader = false
+    @State private var showBanner = false
+    @State private var showContent = false
 
     var body: some View {
         NavigationStack {
@@ -40,6 +45,7 @@ struct HomeView: View {
                             
                             VStack(alignment: .leading) {
                                 // Location picker
+                                HStack {
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text("Location")
                                         .font(.caption)
@@ -60,7 +66,22 @@ struct HomeView: View {
                                         }
                                     }
                                 }
-                                .offset(y: 25)
+                                
+                                Spacer()
+                                
+                                // Logout Button
+                                Button {
+                                    appState.signOut()
+                                } label: {
+                                    Image(systemName: "rectangle.portrait.and.arrow.right")
+                                        .font(.title3)
+                                        .foregroundColor(.gray)
+                                }
+                                .padding(.trailing, 10)
+                            }
+                            .offset(y: 25)
+                            .opacity(showHeader ? 1 : 0)
+                            .offset(y: showHeader ? 0 : -20)
                                 
                                 VStack {
                                     Image("Banner")
@@ -69,6 +90,8 @@ struct HomeView: View {
                                         .cornerRadius(12)
                                         .padding(.top, 20)
                                         .offset(x: 20, y: 90)
+                                        .opacity(showBanner ? 1 : 0)
+                                        .scaleEffect(showBanner ? 1 : 0.9)
                                 }
                             }
                             .padding(.horizontal)
@@ -79,13 +102,22 @@ struct HomeView: View {
                             VStack(alignment: .leading) {
                                 SearchView(viewModel: coffeeViewModel)
                                     .offset(x: -25, y: -200)
+                                    .opacity(showContent ? 1 : 0)
                             }
                             
                             MenuBarView(viewModel: coffeeViewModel)
+                                .opacity(showContent ? 1 : 0)
                             
-                            CoffeeGridView(viewModel: coffeeViewModel) { tappedProduct in
-                                selectedProduct = tappedProduct
-                            }
+                            CoffeeGridView(
+                                viewModel: coffeeViewModel,
+                                onProductTap: { tappedProduct in
+                                    selectedProduct = tappedProduct
+                                },
+                                onAddToCart: { coffeeItem in
+                                    // Add to cart with default size M
+                                    cartVM.addToCart(product: coffeeItem.asProductDetail, size: "M")
+                                }
+                            )
                             .padding(.bottom, 100)
                         }
                     }
@@ -101,6 +133,8 @@ struct HomeView: View {
                                 showFavorites = true
                             } else if bottomBarViewModel.selectedTab == "cart" {
                                 showCart = true
+                            } else if bottomBarViewModel.selectedTab == "notifications" {
+                                showNotifications = true
                             }
                         }
                         .onChange(of: showFavorites) {
@@ -110,6 +144,11 @@ struct HomeView: View {
                         }
                         .onChange(of: showCart) {
                             if !showCart {
+                                bottomBarViewModel.selectedTab = "home"
+                            }
+                        }
+                        .onChange(of: showNotifications) {
+                            if !showNotifications {
                                 bottomBarViewModel.selectedTab = "home"
                             }
                         }
@@ -142,6 +181,31 @@ struct HomeView: View {
                 CartView(rootPresenting: $showCart)
                     .environmentObject(cartVM)
             }
+            // Navigation for notifications
+            .navigationDestination(isPresented: $showNotifications) {
+                NotificationsView()
+            }
+        }
+        .onAppear {
+            // Staggered animations for different sections
+            withAnimation(.easeOut(duration: 0.5)) {
+                showHeader = true
+            }
+            
+            withAnimation(.spring(response: 0.6, dampingFraction: 0.8).delay(0.2)) {
+                showBanner = true
+            }
+            
+            withAnimation(.easeOut(duration: 0.5).delay(0.3)) {
+                showContent = true
+            }
+        }
+        .alert(isPresented: $cartVM.showAlert) {
+            Alert(
+                title: Text("Added to Cart! 🛒"),
+                message: Text(cartVM.successMessage ?? ""),
+                dismissButton: .default(Text("OK"))
+            )
         }
     }
 }
@@ -153,5 +217,6 @@ struct HomeView: View {
     return HomeView()
         .environmentObject(favoriteVM)
         .environmentObject(cartVM)
+        .environmentObject(AppState())
 }
 

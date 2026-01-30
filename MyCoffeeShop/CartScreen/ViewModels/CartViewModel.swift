@@ -34,5 +34,9 @@ class CartViewModel: ObservableObject {
             }
         }
     }
+    
+    func clearCart() {
+        cartItems.removeAll()
+    }
 }
 

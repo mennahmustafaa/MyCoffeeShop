@@ -23,6 +23,8 @@ class AuthViewModel: ObservableObject {
         debugMessage += "\nSignIn called"
         guard !email.isEmpty, !password.isEmpty else {
             errorMessage = "Please enter email and password."
+            showAlert = true
+            alertMessage = "Please enter email and password."
             return
         }
         
@@ -36,14 +38,24 @@ class AuthViewModel: ObservableObject {
                 debugMessage += "\nSignIn success"
                 await MainActor.run {
                     self.isLoading = false
+                    self.alertMessage = "Login Successful! Welcome back!"
+                    self.showAlert = true
+                    self.shouldNavigate = true
                     self.isAuthenticated = true
                 }
             } catch {
                 debugMessage += "\nSignIn error: \(error)"
                 await MainActor.run {
                     self.isLoading = false
-                    self.errorMessage = error.localizedDescription
-                    self.alertMessage = "Login Failed: \(error.localizedDescription)"
+                    // Check for invalid credentials
+                    let errorString = error.localizedDescription.lowercased()
+                    if errorString.contains("invalid") || errorString.contains("credentials") || errorString.contains("password") || errorString.contains("not found") {
+                        self.errorMessage = "Invalid email or password."
+                        self.alertMessage = "Login Failed\n\nThe email or password you entered is incorrect. Please try again."
+                    } else {
+                        self.errorMessage = error.localizedDescription
+                        self.alertMessage = "Login Failed: \(error.localizedDescription)"
+                    }
                     self.showAlert = true
                 }
             }
@@ -75,18 +87,30 @@ class AuthViewModel: ObservableObject {
             do {
                 try await SupabaseService.shared.signUp(email: email, password: password)
                 debugMessage += "\nSignUp success"
+                
+                // Auto sign-in after successful signup (no email confirmation required)
+                try await SupabaseService.shared.signIn(email: email, password: password)
+                debugMessage += "\nAuto sign-in success"
+                
                 await MainActor.run {
                     self.isLoading = false
-                    self.alertMessage = "Sign Up Successful! Please check your email to confirm."
-                    self.shouldNavigate = true
+                    self.alertMessage = "Account created successfully! Welcome!"
                     self.showAlert = true
+                    self.isAuthenticated = true
                 }
             } catch {
                 debugMessage += "\nSignUp error: \(error)"
                 await MainActor.run {
                     self.isLoading = false
-                    self.errorMessage = error.localizedDescription
-                    self.alertMessage = "Sign Up Failed: \(error.localizedDescription)"
+                    // Check if user already exists
+                    let errorString = error.localizedDescription.lowercased()
+                    if errorString.contains("already registered") || errorString.contains("already exists") || errorString.contains("user already") {
+                        self.errorMessage = "This email is already registered."
+                        self.alertMessage = "Account Already Exists\n\nThis email is already registered. Please login instead."
+                    } else {
+                        self.errorMessage = error.localizedDescription
+                        self.alertMessage = "Sign Up Failed: \(error.localizedDescription)"
+                    }
                     self.showAlert = true
                 }
             }
@@ -125,6 +149,47 @@ class AuthViewModel: ObservableObject {
                     self.isLoading = false
                     self.errorMessage = error.localizedDescription
                     self.alertMessage = "Failed to send reset link: \(error.localizedDescription)"
+                    self.showAlert = true
+                }
+            }
+        }
+    }
+    
+    func updatePassword() {
+        debugMessage += "\nUpdatePassword called"
+        
+        guard !password.isEmpty, !confirmPassword.isEmpty else {
+            errorMessage = "Please enter and confirm your new password."
+            showAlert = true
+            alertMessage = "Please enter and confirm your new password."
+            return
+        }
+        
+        guard password == confirmPassword else {
+            errorMessage = "Passwords do not match."
+            showAlert = true
+            alertMessage = "Passwords do not match."
+            return
+        }
+        
+        isLoading = true
+        errorMessage = nil
+        
+        Task {
+            do {
+                try await SupabaseService.shared.updateUser(password: password)
+                await MainActor.run {
+                    self.isLoading = false
+                    self.alertMessage = "Password updated successfully!"
+                    self.showAlert = true
+                    self.password = ""
+                    self.confirmPassword = ""
+                }
+            } catch {
+                await MainActor.run {
+                    self.isLoading = false
+                    self.errorMessage = error.localizedDescription
+                    self.alertMessage = "Failed to update password: \(error.localizedDescription)"
                     self.showAlert = true
                 }
             }
