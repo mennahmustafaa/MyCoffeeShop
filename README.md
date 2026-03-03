@@ -1,5 +1,9 @@
 # MyCoffeeShop
 
+https://github.com/user-attachments/assets/7319480e-900d-4fd7-809e-50da114e8996
+
+
+
 A SwiftUI-based iOS application for a coffee shop, designed to provide users with a seamless experience to browse, order, and manage their favorite coffee drinks.
 
 ---
